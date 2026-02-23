@@ -552,6 +552,21 @@ document.addEventListener("DOMContentLoaded", () => {
             .join("")}
         </ul>
       </div>
+      <div class="share-buttons">
+        <span class="share-label">Share:</span>
+        <button class="share-button facebook" data-activity="${name}" data-description="${details.description}" data-schedule="${formattedSchedule}" title="Share on Facebook">
+          📘
+        </button>
+        <button class="share-button twitter" data-activity="${name}" data-description="${details.description}" data-schedule="${formattedSchedule}" title="Share on Twitter">
+          🐦
+        </button>
+        <button class="share-button whatsapp" data-activity="${name}" data-description="${details.description}" data-schedule="${formattedSchedule}" title="Share on WhatsApp">
+          💬
+        </button>
+        <button class="share-button email" data-activity="${name}" data-description="${details.description}" data-schedule="${formattedSchedule}" title="Share via Email">
+          📧
+        </button>
+      </div>
       <div class="activity-card-actions">
         ${
           currentUser
@@ -586,6 +601,14 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       }
     }
+
+    // Add click handlers for share buttons
+    const shareButtons = activityCard.querySelectorAll(".share-button");
+    shareButtons.forEach((button) => {
+      button.addEventListener("click", (event) => {
+        handleShare(event, name, details.description, formattedSchedule);
+      });
+    });
 
     activitiesList.appendChild(activityCard);
   }
@@ -797,6 +820,59 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
     );
+  }
+
+  // Handle sharing activities
+  function handleShare(event, activityName, description, schedule) {
+    const button = event.currentTarget;
+    const platform = button.classList.contains("facebook")
+      ? "facebook"
+      : button.classList.contains("twitter")
+      ? "twitter"
+      : button.classList.contains("whatsapp")
+      ? "whatsapp"
+      : "email";
+
+    // Create a shareable message
+    const shareTitle = `${activityName} - Mergington High School`;
+    const shareText = `Check out this activity at Mergington High School!\n\n${activityName}\n${description}\nSchedule: ${schedule}`;
+    const shareUrl = window.location.href;
+
+    // Different sharing URLs for each platform
+    let shareLink = "";
+
+    switch (platform) {
+      case "facebook":
+        shareLink = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+          shareUrl
+        )}&quote=${encodeURIComponent(shareText)}`;
+        break;
+      case "twitter":
+        shareLink = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+          shareText
+        )}&url=${encodeURIComponent(shareUrl)}`;
+        break;
+      case "whatsapp":
+        shareLink = `https://wa.me/?text=${encodeURIComponent(
+          shareText + "\n" + shareUrl
+        )}`;
+        break;
+      case "email":
+        shareLink = `mailto:?subject=${encodeURIComponent(
+          shareTitle
+        )}&body=${encodeURIComponent(shareText + "\n\n" + shareUrl)}`;
+        break;
+    }
+
+    // Open the share link in a new window
+    if (platform === "email") {
+      window.location.href = shareLink;
+    } else {
+      window.open(shareLink, "_blank", "width=600,height=400");
+    }
+
+    // Show a success message
+    showMessage(`Sharing ${activityName}...`, "info");
   }
 
   // Show message function
