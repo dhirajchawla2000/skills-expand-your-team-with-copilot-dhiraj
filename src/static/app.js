@@ -869,13 +869,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Open the share link in a new window
     if (platform === "email") {
-      window.location.href = shareLink;
+      // Use an anchor element to avoid navigation issues
+      const emailLink = document.createElement("a");
+      emailLink.href = shareLink;
+      emailLink.click();
     } else {
       window.open(shareLink, "_blank", "width=600,height=400");
     }
-
-    // Show a success message
-    showMessage(`Sharing ${activityName}...`, "info");
   }
 
   // Show message function
