@@ -867,14 +867,13 @@ document.addEventListener("DOMContentLoaded", () => {
         break;
     }
 
-    // Open the share link in a new window
+    // Open the share link
     if (platform === "email") {
-      // Use an anchor element to avoid navigation issues
-      const emailLink = document.createElement("a");
-      emailLink.href = shareLink;
-      emailLink.click();
+      // For email, use window.location to open the default mail client
+      window.location.href = shareLink;
     } else {
-      window.open(shareLink, "_blank", "width=600,height=400");
+      // For social platforms, open in a new window/tab
+      window.open(shareLink, "_blank", "noopener,noreferrer");
     }
   }
 
