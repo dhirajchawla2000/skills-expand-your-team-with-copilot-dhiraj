@@ -554,16 +554,16 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
       <div class="share-buttons">
         <span class="share-label">Share:</span>
-        <button class="share-button facebook" data-activity="${name}" data-description="${details.description}" data-schedule="${formattedSchedule}" title="Share on Facebook">
+        <button class="share-button facebook" title="Share on Facebook">
           📘
         </button>
-        <button class="share-button twitter" data-activity="${name}" data-description="${details.description}" data-schedule="${formattedSchedule}" title="Share on Twitter">
+        <button class="share-button twitter" title="Share on Twitter">
           🐦
         </button>
-        <button class="share-button whatsapp" data-activity="${name}" data-description="${details.description}" data-schedule="${formattedSchedule}" title="Share on WhatsApp">
+        <button class="share-button whatsapp" title="Share on WhatsApp">
           💬
         </button>
-        <button class="share-button email" data-activity="${name}" data-description="${details.description}" data-schedule="${formattedSchedule}" title="Share via Email">
+        <button class="share-button email" title="Share via Email">
           📧
         </button>
       </div>
@@ -825,13 +825,16 @@ document.addEventListener("DOMContentLoaded", () => {
   // Handle sharing activities
   function handleShare(event, activityName, description, schedule) {
     const button = event.currentTarget;
-    const platform = button.classList.contains("facebook")
-      ? "facebook"
-      : button.classList.contains("twitter")
-      ? "twitter"
-      : button.classList.contains("whatsapp")
-      ? "whatsapp"
-      : "email";
+    
+    // Determine platform from button classes
+    let platform = "email"; // default
+    if (button.classList.contains("facebook")) {
+      platform = "facebook";
+    } else if (button.classList.contains("twitter")) {
+      platform = "twitter";
+    } else if (button.classList.contains("whatsapp")) {
+      platform = "whatsapp";
+    }
 
     // Create a shareable message
     const shareTitle = `${activityName} - Mergington High School`;
